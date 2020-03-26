@@ -17,7 +17,7 @@ Updated: 12/9/2019 modified the data splitting function.
 import numpy as np
 import pandas as pd
 import re
-import talib as tb
+#import talib as tb
 from sklearn.preprocessing import StandardScaler
 #import pandas_datareader as pdr
 
@@ -86,106 +86,106 @@ class Stock:
     
 
     
-    def prepare_technical(self):
-        
-        """
-# =============================================================================
-#  Prepare the features we use for the model
-# =============================================================================
-#1. HL_PCT: the variation of the stock price in a single day
-#2. PCT_change: the variation between the open price and the close price
-#3. Adj close price of the day
-
-
-        
-        """
-        df3 = self.df.copy()
-        # transform the data and get %change daily       
-        df3['HL_PCT'] = (df3['High'] - df3['Low']) / df3['Low'] * 100.0
-        # spread/volatility from day to day
-        df3['PCT_change'] = (df3['Adj Close'] - df3['Open']) / df3['Open'] * 100.0
-        
-#obtain the data from the technical analysis function and process it into useful features
-#        open = df3['Open'].values
-        close = df3['Adj Close'].values
-        high = df3['High'].values
-        low = df3['Low'].values
-        volume = df3['Volume'].values
-        
-#The technical indicators below cover different types of features:
-#1) Price change – ROCR, MOM
-#2) Stock trend discovery – ADX, MFI
-#3) Buy&Sell signals – WILLR, RSI, CCI, MACD
-#4) Volatility signal – ATR
-#5) Volume weights – OBV
-#6) Noise elimination and data smoothing – TRIX
-        
-# define the technical analysis matrix
-        
-#        https://www.fmlabs.com/reference/default.htm?url=ExpMA.htm
-
-#  Overlap Studies
-        
-        # make sure there is NO forward looking bias.
-        #moving average
-        df3['MA_5']  = tb.MA(close, timeperiod=5) 
-        df3['MA_20'] = tb.MA(close, timeperiod=20)
-        df3['MA_60'] = tb.MA(close, timeperiod=60)
-#        df3['MA_120'] = tb.MA(close, timeperiod=120)
-        
-        # exponential moving average
-        df3['EMA_5'] = tb.MA(close, timeperiod=15)  
-        # 5-day halflife. the timeperiod in the function is the "span".
-
-        df3['up_band'] = tb.BBANDS(close, timeperiod=5, nbdevup=2, nbdevdn=2, matype=0)[0]
-        df3['mid_band'] = tb.BBANDS(close, timeperiod=5, nbdevup=2, nbdevdn=2, matype=0)[1]
-        df3['low_band'] = tb.BBANDS(close, timeperiod=5, nbdevup=2, nbdevdn=2, matype=0)[2]
-            
-# Momentum Indicators
-        df3['ADX'] = tb.ADX(high, low, close, timeperiod=20)            
-#        df3['ADXR'] = tb.ADXR(high, low, close, timeperiod=20)                         
-        df3['MACD'] = tb.MACD(close, fastperiod=12, slowperiod=26, signalperiod=9)[2]  
-        df3['RSI'] = tb.RSI(close, timeperiod=14)
-#       df3['AD'] = tb.AD(high, low, close, volume)
-        df3['ATR'] = tb.ATR(high, low, close, timeperiod=14)
-        df3['MOM'] = tb.MOM(close, timeperiod=10)
-        df3['WILLR'] = tb.WILLR(high, low, close, timeperiod=10)
-        df3['CCI'] = tb.CCI(high, low, close, timeperiod=14)
-            
-#   Volume Indicators
-        df3['OBV'] = tb.OBV(close, volume*1.0)
-
-#   drop the NAN rows in the dataframe
-#        df3.dropna(axis = 0, inplace = True)
-#        df3.fillna(value=-99999, inplace=True)
-        
-        df3 = df3[['Adj Close',
-                   'HL_PCT',
-                   'PCT_change',
-                   'Volume',
-                   'MA_5',
-                   'MA_20',
-                   'MA_60',
-#                   'MA_120',
-                   'EMA_5',
-                   'up_band',
-                   'mid_band',
-                   'low_band',
-                   'ADX',
-                   'MACD',
-                   'RSI',
-                   'ATR',
-                   'MOM',
-                   'WILLR',
-                   'CCI',
-                   'OBV'
-                   ]]
-        
-#        forecast_col = 'Adj Close' 
-#        df3.loc[:,'label'] = df3[forecast_col].shift(-forecast_out)
-        
-        return df3
-        
+#    def prepare_technical(self):
+#        
+#        """
+## =============================================================================
+##  Prepare the features we use for the model
+## =============================================================================
+##1. HL_PCT: the variation of the stock price in a single day
+##2. PCT_change: the variation between the open price and the close price
+##3. Adj close price of the day
+#
+#
+#        
+#        """
+#        df3 = self.df.copy()
+#        # transform the data and get %change daily       
+#        df3['HL_PCT'] = (df3['High'] - df3['Low']) / df3['Low'] * 100.0
+#        # spread/volatility from day to day
+#        df3['PCT_change'] = (df3['Adj Close'] - df3['Open']) / df3['Open'] * 100.0
+#        
+##obtain the data from the technical analysis function and process it into useful features
+##        open = df3['Open'].values
+#        close = df3['Adj Close'].values
+#        high = df3['High'].values
+#        low = df3['Low'].values
+#        volume = df3['Volume'].values
+#        
+##The technical indicators below cover different types of features:
+##1) Price change – ROCR, MOM
+##2) Stock trend discovery – ADX, MFI
+##3) Buy&Sell signals – WILLR, RSI, CCI, MACD
+##4) Volatility signal – ATR
+##5) Volume weights – OBV
+##6) Noise elimination and data smoothing – TRIX
+#        
+## define the technical analysis matrix
+#        
+##        https://www.fmlabs.com/reference/default.htm?url=ExpMA.htm
+#
+##  Overlap Studies
+#        
+#        # make sure there is NO forward looking bias.
+#        #moving average
+#        df3['MA_5']  = tb.MA(close, timeperiod=5) 
+#        df3['MA_20'] = tb.MA(close, timeperiod=20)
+#        df3['MA_60'] = tb.MA(close, timeperiod=60)
+##        df3['MA_120'] = tb.MA(close, timeperiod=120)
+#        
+#        # exponential moving average
+#        df3['EMA_5'] = tb.MA(close, timeperiod=15)  
+#        # 5-day halflife. the timeperiod in the function is the "span".
+#
+#        df3['up_band'] = tb.BBANDS(close, timeperiod=5, nbdevup=2, nbdevdn=2, matype=0)[0]
+#        df3['mid_band'] = tb.BBANDS(close, timeperiod=5, nbdevup=2, nbdevdn=2, matype=0)[1]
+#        df3['low_band'] = tb.BBANDS(close, timeperiod=5, nbdevup=2, nbdevdn=2, matype=0)[2]
+#            
+## Momentum Indicators
+#        df3['ADX'] = tb.ADX(high, low, close, timeperiod=20)            
+##        df3['ADXR'] = tb.ADXR(high, low, close, timeperiod=20)                         
+#        df3['MACD'] = tb.MACD(close, fastperiod=12, slowperiod=26, signalperiod=9)[2]  
+#        df3['RSI'] = tb.RSI(close, timeperiod=14)
+##       df3['AD'] = tb.AD(high, low, close, volume)
+#        df3['ATR'] = tb.ATR(high, low, close, timeperiod=14)
+#        df3['MOM'] = tb.MOM(close, timeperiod=10)
+#        df3['WILLR'] = tb.WILLR(high, low, close, timeperiod=10)
+#        df3['CCI'] = tb.CCI(high, low, close, timeperiod=14)
+#            
+##   Volume Indicators
+#        df3['OBV'] = tb.OBV(close, volume*1.0)
+#
+##   drop the NAN rows in the dataframe
+##        df3.dropna(axis = 0, inplace = True)
+##        df3.fillna(value=-99999, inplace=True)
+#        
+#        df3 = df3[['Adj Close',
+#                   'HL_PCT',
+#                   'PCT_change',
+#                   'Volume',
+#                   'MA_5',
+#                   'MA_20',
+#                   'MA_60',
+##                   'MA_120',
+#                   'EMA_5',
+#                   'up_band',
+#                   'mid_band',
+#                   'low_band',
+#                   'ADX',
+#                   'MACD',
+#                   'RSI',
+#                   'ATR',
+#                   'MOM',
+#                   'WILLR',
+#                   'CCI',
+#                   'OBV'
+#                   ]]
+#        
+##        forecast_col = 'Adj Close' 
+##        df3.loc[:,'label'] = df3[forecast_col].shift(-forecast_out)
+#        
+#        return df3
+#        
 
 
     def export_data(self):      

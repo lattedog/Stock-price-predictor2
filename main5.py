@@ -93,7 +93,9 @@ if __name__ == '__main__':
 
     my_stock = stk.Stock(stock_symbol, time_frame)
     
-    my_df = my_stock.prepare_technical()
+#    my_df = my_stock.prepare_technical()
+    
+    my_df = pd.read_csv('Data_for_{}.csv'.format(stock_symbol), parse_dates = True, index_col = 0)
     
     print("Data loaded !!!")
     
